@@ -1,0 +1,104 @@
+﻿@using System
+@using RestSharp
+@using RestSharp.Authenticators
+@using RestSharp.Deserializers
+
+@functions {
+    // set our username and password
+    string username = "@Username@";
+    string password = "@Password@";
+
+    public class ValidateResponse
+    {
+        public string Status { get; set; }
+    }
+
+    public class ApiValidationFailure
+    {
+        public string Property { get; set; }
+        public string FailureCode { get; set; }
+        public string Details { get; set; }
+    }
+
+    ValidateResponse VerifyCode(Guid requestId, string code)
+    {
+        // instantiate a new HttpClient
+        var client = new RestClient(string.Format("https://services.dynmark.com/webapi/verify/{0}/validate", requestId));
+        client.Authenticator = new HttpBasicAuthenticator(username, password);
+        client.Timeout = 130000;
+
+        var body = new
+        {
+            code
+        };
+
+        var request = new RestRequest();
+        request.AddJsonBody(body);
+
+        var response = client.Put<ValidateResponse>(request);
+
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            return response.Data;
+        }
+        if (response.StatusCode == HttpStatusCode.NoContent)
+        {
+            throw new ArgumentException("Your code was not recognised.");
+        }
+        else if (response.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            throw new ArgumentException("Invalid credentials");
+        }
+        else if (response.StatusCode == HttpStatusCode.BadRequest)
+        {
+            var failures = new JsonDeserializer().Deserialize<List<ApiValidationFailure>>(response);
+
+            // Handle failure due to bad input
+            throw new ArgumentException("There was an error in the request");
+        }
+
+        throw new ArgumentException("Non success response");
+    }
+}
+
+<html>
+<head>
+</head>
+<body>
+    @{
+        Guid requestId = (Guid)Session["requestId"];
+        string code = Request["Code"];
+        bool showCodeInput = true;
+
+        if (!string.IsNullOrEmpty(code))
+        {
+            try
+            {
+                var response = VerifyCode(requestId, code);
+
+                if (response.Status == "CodeVerified")
+                {
+                    showCodeInput = false;
+                    <div>Your code was correct and is verified.</div>
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                <div>@ex.Message</div>
+                <p>
+                    Try again?
+                </p>
+}
+        }
+
+        if (showCodeInput)
+        {
+            <form action="Verify.cshtml" method="POST">
+                <p>Please enter the code we sent to complete your registration</p>
+                <input type="text" name="code" />
+                <input type="submit" value="Verify" />
+            </form>
+        }
+    }
+</body>
+</html>

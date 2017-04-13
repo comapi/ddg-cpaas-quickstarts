@@ -1,0 +1,115 @@
+﻿@using System
+@using System.Collections.Generic
+@using System.Linq
+@using RestSharp
+@using RestSharp.Authenticators
+@using RestSharp.Deserializers
+
+@functions {
+    // set our Dynmark username and password
+    string username = "@Username@";
+    string password = "@Password@";
+
+    public class SendCodeResponse
+    {
+        public Guid RequestId { get; set; }
+        public string To { get; set; }
+        public string NumberStatus { get; set; }
+    }
+
+    public class ApiValidationFailure
+    {
+        public string Property { get; set; }
+        public string FailureCode { get; set; }
+        public string Details { get; set; }
+    }
+
+    SendCodeResponse SendCode(string phoneNumber)
+    {
+        // instantiate a new HttpClient
+        var client = new RestClient("https://services.dynmark.com/webapi/verify");
+        client.Authenticator = new HttpBasicAuthenticator(username, password);
+        client.Timeout = 130000;
+
+        var body = new
+        {
+            from = "Example",
+            to = phoneNumber
+        };
+
+        var request = new RestRequest();
+        request.AddJsonBody(body);
+
+        var response = client.Post<SendCodeResponse>(request);
+
+        if (response.StatusCode == HttpStatusCode.Created)
+        {
+            return response.Data;
+        }
+        else if (response.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            throw new ArgumentException("Invalid credentials");
+        }
+        else if (response.StatusCode == HttpStatusCode.BadRequest)
+        {
+            var failures = new JsonDeserializer().Deserialize<List<ApiValidationFailure>>(response);
+
+            if (failures.Any(f => f.FailureCode == "Throttled"))
+            {
+                throw new ArgumentException("Request to phone number too frequent");
+            }
+            else if (failures.Any(f => f.FailureCode == "ToInvalid"))
+            {
+                throw new ArgumentException("Your phone number doesn't look like a valid number.");
+            }
+            else
+            {
+                // Handle failure due to bad input
+                throw new ArgumentException("There was an error in the request");
+            }
+        }
+
+        throw new ArgumentException("Non success response");
+    }
+}
+
+<html>
+<head></head>
+<body>
+    @{
+        string phoneNumber = Request["phoneNumber"];
+        if (!string.IsNullOrEmpty(phoneNumber))
+        {
+            try
+            {
+                SendCodeResponse response = SendCode(phoneNumber);
+
+
+                Session["requestId"] = response.RequestId;
+
+                if (response.NumberStatus == "On" || response.NumberStatus == "Off")
+                {
+                    Response.Redirect("Verify.cshtml");
+                }
+                else
+                {
+                    <div>Sorry, we couldn't sent you a verify code.</div>
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                <div>@ex.Message</div>
+            }
+            <p>
+                Send another code? Try again below:
+            </p>
+        }
+    }
+
+    <form action="Register.cshtml" method="POST">
+        <p>To complete your registration, please enter your mobile phone number. A verification code will be sent to this number.</p>
+        <input type="text" name="phoneNumber" value="447700090000" />
+        <input type="submit" value="Register" />
+    </form>
+</body>
+</html>

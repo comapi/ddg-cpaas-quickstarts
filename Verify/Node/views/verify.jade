@@ -1,0 +1,11 @@
+extends layout
+
+block content
+
+    p Please enter the code we sent to complete your registration
+    form(action="verify" method="POST")
+        input(type="text" name="code")
+        input(type="submit" value="Verify")
+
+    div= message
+    

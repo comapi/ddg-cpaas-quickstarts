@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="C:/Program Files/Java/eclipse/configuration/org.eclipse.osgi/1143/0/.cp/lib/servlet-api-3.0.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Java/eclipse/configuration/org.eclipse.osgi/1143/0/.cp/lib/javax.servlet.jsp.jstl-1.2.0.v201105211821.jar"/>
+	<classpathentry kind="lib" path="C:/Work/Dynmark Samples/Java/Messaging/libraries/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Work/Dynmark Samples/Java/Messaging/libraries/httpasyncclient-4.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Work/Dynmark Samples/Java/Messaging/libraries/httpclient-4.5.1.jar"/>
+	<classpathentry kind="lib" path="C:/Work/Dynmark Samples/Java/Messaging/libraries/httpcore-4.4.4.jar"/>
+	<classpathentry kind="lib" path="C:/Work/Dynmark Samples/Java/Messaging/libraries/httpcore-nio-4.4.4.jar"/>
+	<classpathentry kind="lib" path="C:/Work/Dynmark Samples/Java/Messaging/libraries/unirest-java-1.4.7.jar"/>
+	<classpathentry kind="lib" path="C:/Work/Dynmark Samples/Java/Messaging/libraries/jackson-core-2.7.2.jar"/>
+	<classpathentry kind="lib" path="C:/Work/Dynmark Samples/Java/Messaging/libraries/jackson-databind-2.7.2.jar"/>
+	<classpathentry kind="lib" path="C:/Work/Dynmark Samples/Java/Messaging/libraries/jackson-annotations-2.7.2.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>

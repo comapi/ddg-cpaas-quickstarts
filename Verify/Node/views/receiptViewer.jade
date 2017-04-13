@@ -1,0 +1,19 @@
+
+extends layout
+
+block content
+    table
+        thead
+            th ClientRef
+            th Received At
+            th Recipient
+            th StatusId
+            th Status Description
+        tbody
+            each val in global.receipt
+                tr
+                    td= val.clientRef
+                    td= val.date
+                    td= val.recipient
+                    td= val.statusId
+                    td= val.statusDescription

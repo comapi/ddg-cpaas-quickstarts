@@ -1,0 +1,11 @@
+extends layout
+
+block content
+
+    p To complete your registration, please enter your mobile phone number. A verification code will be sent to this number.
+    form(action="register" method="POST")
+        input(type="text" name="phoneNumber" value="447700090000")
+        input(type="submit" value="Register")
+
+    div= message
+    
