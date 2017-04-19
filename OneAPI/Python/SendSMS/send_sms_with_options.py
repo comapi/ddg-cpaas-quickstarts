@@ -17,7 +17,14 @@ myRequest = {
     "to": {
         "phoneNumber": "447123123123"
     },
-    "body": "This is an SMS via Comapi \"One\" API",    
+    "body": "This is an SMS via Comapi \"One\" API",
+    "channelOptions":
+    {
+        "sms": {
+            "from": "Comapi",
+            "allowUnicode": False
+        }
+    },
     "rules": ["sms"]
 }
 
