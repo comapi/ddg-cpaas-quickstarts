@@ -5,8 +5,14 @@ print("")
 print("Sending SMS using Comapi and Python")
 print("-----------------------------------")
 
+# Your Comapi settings
+APISPACE = "***ADD YOUR API SPACE ID HERE***"
+TOKEN = "***ADD YOUR SECURITY TOKEN HERE***"
+
+# Setup the http connection
 conn = http.client.HTTPSConnection("api.comapi.com")
 
+# Construct the Comapi API request
 myRequest = {
     "to": {
         "phoneNumber": "447990766636"
@@ -26,15 +32,17 @@ print("")
 print("Request JSON: ")
 print(json.dumps(myRequest))
 
+# Setup the http headers
 headers = {
-    'authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0N2E2YTQ5YS0zZTBkLTQ0MjUtODI3ZS1hMmE4YTNhYzIwNWIiLCJpc3MiOiJodHRwczovL2FwaS5jb21hcGkuY29tL2FjY2Vzc3Rva2VucyIsImF1ZCI6Imh0dHBzOi8vYXBpLmNvbWFwaS5jb20iLCJhY2NvdW50SWQiOjM0NzI3LCJhcGlTcGFjZUlkIjoiYzEyNGNmNmUtNDM1Mi00YjI2LWE3MWEtYzMwMzJiZWE3YTAxIiwicGVybWlzc2lvbnMiOlsiY2hhbjpyIiwibXNnOmFueTpzIiwibXNnOnIiLCJwcm9mOnJhIiwiYXBpczpybyJdLCJzdWIiOiI0N2E2YTQ5YS0zZTBkLTQ0MjUtODI3ZS1hMmE4YTNhYzIwNWIiLCJwcm9maWxlSWQiOiJBY21lIiwibmFtZSI6IkdlbmVyYWxTZW5kIiwiaWF0IjoxNDkxNDA0NDMxfQ.3tGzifbQKvSISAZSQyEjeUxqqU3JwASPeqY2T7gLNn4",
+    'authorization': "Bearer " + TOKEN,
     'content-type': "application/json",
     'cache-control': "no-cache"
 }
 
+# Make the webservice request
 print("")
 print("Calling Comapi...")
-conn.request("POST", "/apispaces/c124cf6e-4352-4b26-a71a-c3032bea7a01/messages",
+conn.request("POST", "/apispaces/" + APISPACE + "/messages",
              json.dumps(myRequest), headers)
 
 res = conn.getresponse()
