@@ -31,12 +31,6 @@ request.body =
       \"to\": {
           \"phoneNumber\": \"447123123123\"
         },
-      \"channelOptions\": {
-          \"sms\": {
-              \"from\": \"Comapi\",
-              \"allowUnicode\": true
-            }
-        },
      \"rules\": [ \"sms\" ]
      }"
 
