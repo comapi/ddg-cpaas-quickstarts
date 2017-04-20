@@ -1,7 +1,7 @@
 {
   "name": "comapi-send-sms-tutorial-nodejs",
   "version": "1.0.0",
-  "description": "Tutorial to dmeonstrate how to send SMS using Comapi using Node.js",
+  "description": "Tutorial to demonstrate how to send SMS using Comapi using Node.js",
   "main": "send.js",
   "scripts": {
     "test": "node send.js"
