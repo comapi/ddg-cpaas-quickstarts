@@ -313,3 +313,7 @@ typings/
 
 # dotenv environment variables file
 .env
+/OneAPI/Java/SendSMS/nbproject/private/
+/OneAPI/Java/JavaApplication2/nbproject/private/
+/OneAPI/Java/JavaApplication2/build/
+/OneAPI/Java/SendSMS/target/
