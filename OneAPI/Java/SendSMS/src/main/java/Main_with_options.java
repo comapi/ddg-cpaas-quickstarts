@@ -43,7 +43,7 @@ public class Main {
         // Call Comapi
         try {
             System.out.println("Calling Comapi...");
-            HttpResponse<JsonNode> response = Unirest.post("https://api.comapi.com/apispaces/c124cf6e-4352-4b26-a71a-c3032bea7a01/messages")
+            HttpResponse<JsonNode> response = Unirest.post("https://api.comapi.com/apispaces/" + APISPACE + "/messages")
                     .header("authorization", "Bearer " + TOKEN)
                     .header("content-type", "application/json")
                     .header("cache-control", "no-cache")
