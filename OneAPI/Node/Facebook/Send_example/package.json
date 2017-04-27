@@ -1,0 +1,28 @@
+{
+  "name": "comapi-send-to-facebook-tutorial-nodejs",
+  "version": "1.0.0",
+  "description": "Tutorial to demonstrate how to send to Facebook with Comapi using Node.js",
+  "main": "send.js",
+  "scripts": {
+    "test": "node send.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/comapi/comapi-quickstarts.git"
+  },
+  "keywords": [
+    "comapi",
+    "sms",
+    "send",
+    "message"
+  ],
+  "author": "Dave Baddeley",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/comapi/comapi-quickstarts/issues"
+  },
+  "homepage": "https://github.com/comapi/comapi-quickstarts#readme",
+  "dependencies": {
+    "request": "^2.81.0"
+  }
+}
