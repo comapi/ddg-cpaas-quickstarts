@@ -67,7 +67,7 @@ function generateFacebookMetaData(profileId) {
       }
       else {
         // Something went wrong
-        reject(Error("Call to create Facebook metadata failed with HTTP code: " + response.statusCod));
+        reject(Error("Call to create Facebook metadata failed with HTTP code: " + response.statusCode));
       }
     });
   });
