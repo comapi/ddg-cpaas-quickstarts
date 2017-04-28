@@ -6,7 +6,7 @@ router.get('/', function (req, res, next) {
   // Get the encrypted Facebook metadata for the current user, in this example joe.blogs@acme.com
   generateFacebookMetaData('joe.blogs@acme.com').then(function (response) {
     // Got the Facebook metadata, render the page passing the data
-    res.render('index', {
+    res.render('pages/index', {
       title: 'Comapi Facebook Tutorial',
       metadata: response
     });
@@ -58,7 +58,7 @@ function generateFacebookMetaData(profileId) {
 
     // Send the request
     request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      if (error) reject(new Error(error));
 
       // Check status
       if (response.statusCode == 200) {

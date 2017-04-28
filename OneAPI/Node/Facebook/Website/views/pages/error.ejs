@@ -1,0 +1,30 @@
+<!-- views/pages/error.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../partials/head %>
+</head>
+
+<body class="container">
+
+    <header>
+        <h1>An error occured!</h1>
+    </header>
+
+    <main>
+        <div class="row">
+            <h2>{%= message}</h2>
+            <h3>{%= error.status)}</h3>
+        </div>
+        <div class="row">
+            <pre>
+                {%= error.stack}
+            </pre>
+        </div>
+    </main>
+
+</body>
+
+</html>
