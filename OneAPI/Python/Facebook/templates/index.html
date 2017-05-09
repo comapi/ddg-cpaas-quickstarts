@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Comapi Facebook Opt-in tutorial</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='toastr.min.css') }}">
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='scripts/toastr.min.js') }}"></script>
+
+    <!-- Facebook Send to Messenger standard code to include in the head of the page -->
+    <script lang="Javascript">
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: "APP_ID",
+                xfbml: true,
+                version: "v2.6"
+            });
+
+            FB.Event.subscribe('send_to_messenger', function (e) {
+                // callback for events triggered by the Facebook plugin
+                if (e.event == "opt_in") {
+                    // Send to Messenger clicked render test buttons
+                    $("#testButtons").show();
+                }
+            });
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+</head>
+
+<body class="container">
+
+    <header>
+        <h1>Facebook Opt-in Page</h1>
+    </header>
+
+    <main>
+        <p>
+            You will need to add the Facebook <a href="//developers.facebook.com/docs/messenger-platform/plugin-reference/send-to-messenger"
+                target="_blank"><b>Send to Messenger</b></a> web plugin to your website to get permission to send the user messages
+            via Facebook. This would usually be on your check out page etc...
+        </p>
+
+        <hr>
+
+        <p>
+            Click below to recieve updates via Facebook Messenger
+        </p>
+
+        <!-- The data-ref field will be populated with the metadata returned from Comapi's Facebook webservice', add your own Facebook page_id -->
+        <div class="fb-send-to-messenger" messenger_app_id="336037380081042" page_id="1124253074294266" data-ref="{{ model.metadata }}"
+            color="blue" size="large">
+        </div>
+
+        <hr>
+        <p>
+            When it is clicked a unique Facebook Messenger Id will be created for the customer and your page and automatically sent to
+            Comapi where a <b>fbMessengerId</b> field will be added to the profile you indicated using the <b>data-ref</b>            field on the Send to Messenger control
+        </p>
+        <div id="testButtons" style="display: {{ model.testButtonsDisplay }};">
+            <hr>
+            <p>Use the test buttons below to send test messages to Facebook</p>
+            <form id="buttonForm" method="POST">
+                <button name="SimpleTest">Send Simple Test Message</button>
+                <button name="RichTest">Send Rich Test Message</button>
+            </form>
+            <hr>
+        </div>
+
+        <!-- Test message feedback toast -->
+        {%if model.feedback is defined %}
+        <script language="Javascript">
+            // Setup Toastr
+            toastr.options.closeButton = true;
+            toastr.options.closeMethod = 'fadeOut';
+            toastr.options.closeDuration = 300;
+            toastr.options.closeEasing = 'swing';
+            toastr.options.progressBar = true;
+
+            {% if model.feedback.succeeded %} 
+            toastr.success("{{ model.feedback.message }}", "Test message sent");
+            {% else %}
+            toastr.error("{{ model.feedback.message }}", "Test message failed");
+            {% endif %}
+        </script>
+        {% endif %}
+
+    </main>
+
+</body>
+
+</html>
