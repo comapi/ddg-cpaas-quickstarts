@@ -1,7 +1,6 @@
 require 'uri'
 require 'net/http'
 require 'openssl'
-require 'json'
 
 class ApplicationController < ActionController::Base
 
@@ -99,7 +98,7 @@ class ApplicationController < ActionController::Base
     # Setup the conneciton object
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE # This should be removed and SSL certs validated for production environments
 
     # Setup the HTTP request
     request = Net::HTTP::Post.new(url)
@@ -162,7 +161,7 @@ class ApplicationController < ActionController::Base
     # Setup the conneciton object
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE # This should be removed and SSL certs validated for production environments
 
     # Setup the HTTP request
     request = Net::HTTP::Post.new(url)
