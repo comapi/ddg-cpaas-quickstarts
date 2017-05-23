@@ -19,28 +19,7 @@ namespace Facebook.Controllers
             {
                 try
                 {
-                    // Create the request JSON                              
-                    var requestJson = string.Format(@"{{ ""profileId"": ""{0}"" }}", User.Identity.Name);
-
-                    // Setup a REST client object using the message send URL with our API Space incorporated
-                    var client = new RestClient(string.Format("https://api.comapi.com/apispaces/{0}/channels/facebook/state", APISPACE));
-                    var request = new RestRequest(Method.POST);
-                    request.AddHeader("cache-control", "no-cache");
-                    request.AddHeader("content-type", "application/json");
-                    request.AddHeader("authorization", "Bearer " + TOKEN); // Add the security token
-                    request.AddParameter("application/json", requestJson, ParameterType.RequestBody);
-
-                    // Make the web service call
-                    IRestResponse response = client.Execute(request);
-
-                    if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                    {
-                        // Something went wrong.
-                        throw new InvalidOperationException(string.Format("Call to Comapi failed with status code ({0}), and body: {1}", response.StatusCode, response.Content));
-                    }
-
-                    // Grab the Facebook metadata for the profileId stripping the double quotes
-                    viewData.FacebookMetaData = response.Content.Replace(@"""", "");
+                    viewData.FacebookMetaData = GetFacebookMetaData(User.Identity.Name);
                 }
                 catch (Exception ex)
                 {
@@ -61,9 +40,13 @@ namespace Facebook.Controllers
         {
             var viewData = new Models.HomeIndexViewModel();
 
-            // Send a test message via the Comapi "One" API
             try
             {
+                // Create the Facebook metadata for the logged in user using the Comapi web service.
+                viewData.FacebookMetaData = GetFacebookMetaData(User.Identity.Name);
+
+                // Send a test message via the Comapi "One" API
+
                 // Create the request
                 var myRequest = new FacebookSendRequest()
                 {
@@ -87,7 +70,7 @@ namespace Facebook.Controllers
                 viewData.TestMessageResult = new Models.ResultFeedback()
                 {
                     Success = false,
-                    FeedbackMessage = string.Format(@"The test message failed to send the error message was: {0}", ex.Message)
+                    FeedbackMessage = string.Format(@"The web service call failed: {0}", ex.Message)
                 };
             }
 
@@ -99,9 +82,13 @@ namespace Facebook.Controllers
         {
             var viewData = new Models.HomeIndexViewModel();
 
-            // Send a test message via the Comapi "One" API
             try
             {
+                // Create the Facebook metadata for the logged in user using the Comapi web service.
+                viewData.FacebookMetaData = GetFacebookMetaData(User.Identity.Name);
+
+                // Send a test message via the Comapi "One" API
+
                 // Create the request
                 var myRequest = new FacebookSendRequest()
                 {
@@ -133,7 +120,7 @@ namespace Facebook.Controllers
                 viewData.TestMessageResult = new Models.ResultFeedback()
                 {
                     Success = false,
-                    FeedbackMessage = string.Format(@"The test message failed to send the error message was: {0}", ex.Message)
+                    FeedbackMessage = string.Format(@"The web service call failed: {0}", ex.Message)
                 };
             }
 
@@ -163,6 +150,38 @@ namespace Facebook.Controllers
                 throw new InvalidOperationException(string.Format("Call to Comapi failed with status code ({0}), and body: {1}", response.StatusCode, response.Content));
             }
         }
+
+        /// <summary>
+        /// Retrieves the encrypted meta data to allow Comapi to associate a FB id with a profile.
+        /// </summary>
+        /// <param name="ProfileId">The Comapi profile id you want the FB id saved to</param>
+        /// <returns>The encrypted Facebook meta data</returns>
+        private static String GetFacebookMetaData(String ProfileId)
+        {
+            // Create the request JSON                              
+            var requestJson = string.Format(@"{{ ""profileId"": ""{0}"" }}", ProfileId);
+
+            // Setup a REST client object using the message send URL with our API Space incorporated
+            var client = new RestClient(string.Format("https://api.comapi.com/apispaces/{0}/channels/facebook/state", APISPACE));
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("cache-control", "no-cache");
+            request.AddHeader("content-type", "application/json");
+            request.AddHeader("authorization", "Bearer " + TOKEN); // Add the security token
+            request.AddParameter("application/json", requestJson, ParameterType.RequestBody);
+
+            // Make the web service call
+            IRestResponse response = client.Execute(request);
+
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                // Something went wrong.
+                throw new InvalidOperationException(string.Format("Call to Comapi failed with status code ({0}), and body: {1}", response.StatusCode, response.Content));
+            }
+
+            // Grab the Facebook metadata for the profileId stripping the double quotes
+            return response.Content.Replace(@"""", "");
+        }
+
 
         /// <summary>
         /// JSON.Net Converter for raw JSON
