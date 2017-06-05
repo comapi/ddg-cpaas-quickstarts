@@ -35,6 +35,11 @@ public class IndexHandler {
         System.out.println("Sending FB Message using Comapi and Java");
         System.out.println("----------------------------------------");
        
+        if (this.feedback == null)
+        {
+            this.feedback = new Feedback();
+        }
+                
         // Create Comapi request, this is just a string but you could use objects and serialise to JSON
         String request;
         
@@ -178,12 +183,7 @@ public class IndexHandler {
     /**
      * @return the feedback
      */
-    public Feedback getFeedback() {
-        if (this.feedback == null)
-        {
-            this.feedback = new Feedback();
-        }
-        
+    public Feedback getFeedback() {   
         return feedback;
     }
 

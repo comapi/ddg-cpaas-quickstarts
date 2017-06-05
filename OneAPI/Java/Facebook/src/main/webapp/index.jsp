@@ -108,7 +108,7 @@
         <!-- The data-ref field will be populated with the metadata returned from Comapi's Facebook webservice', add your own Facebook page_id -->
         <div class="fb-send-to-messenger" 
             messenger_app_id="336037380081042" 
-            page_id=">>>>YOUR FACEBOOK PAGE ID<<<<" 
+            page_id=">>> YOUR FACEBOOK PAGE ID <<<" 
             data-ref="<jsp:getProperty name="handler" property="metadata" />"
             color="blue" size="large">
         </div>
@@ -128,25 +128,26 @@
             </form>
             <hr>
         </div>
-            <c:if test="handler.getFeedback() != null" var="result">
-                <script language="Javascript">
-                    // Setup Toastr
-                    toastr.options.closeButton = true;
-                    toastr.options.closeMethod = 'fadeOut';
-                    toastr.options.closeDuration = 300;
-                    toastr.options.closeEasing = 'swing';
-                    toastr.options.progressBar = true;
+            
+        <c:if test="${handler.getFeedback() != null}" var="result">
+            <script language="Javascript">
+                // Setup Toastr
+                toastr.options.closeButton = true;
+                toastr.options.closeMethod = 'fadeOut';
+                toastr.options.closeDuration = 300;
+                toastr.options.closeEasing = 'swing';
+                toastr.options.progressBar = true;
 
-                    <c:choose>
-                        <c:when test="handler.getFeedback().getSucceeded()">
-                            toastr.success("<%= handler.getFeedback().getMessage() %>", "Test message sent");
-                        </c:when>
-                        <c:otherwise>
-                            toastr.error("<%= handler.getFeedback().getMessage() %>", "Test message failed");
-                        </c:otherwise>
-                    </c:choose>
-                </script>
-            </c:if>
+                <c:choose>
+                    <c:when test="${handler.getFeedback().getSucceeded()}">
+                        toastr.success("<%= handler.getFeedback().getMessage() %>", "Test message sent");
+                    </c:when>
+                    <c:otherwise>
+                        toastr.error("<%= handler.getFeedback().getMessage() %>", "Test message failed");
+                    </c:otherwise>
+                </c:choose>
+            </script>
+        </c:if>
  
 
     </main>
