@@ -40,6 +40,7 @@ var options = {
     {
         'cache-control': 'no-cache',
         'content-type': 'application/json',
+        'accept': 'application/json',
         authorization: 'Bearer ' + yourComapiAccessToken
     },
     body: myRequest,

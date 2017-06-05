@@ -13,18 +13,32 @@ var yourComapiAccessToken = 'YOUR_ACCESS_TOKEN';
 var yourMobileNumber = 'YOUR_MOBILE_NUMBER';
 
 console.log('');
-console.log('Sending SMS using Comapi and NodeJS');
-console.log('-----------------------------------');
+console.log('Sending a batch of SMS using Comapi and NodeJS');
+console.log('----------------------------------------------');
 
 // Create Comapi RESTful URL with API Space Id in it
-var comapiUrl = "https://api.comapi.com/apispaces/" + yourComapiAPISpaceId + "/messages";
+var comapiUrl = "https://stage-api.comapi.com/apispaces/" + yourComapiAPISpaceId + "/messages/batch";
 
-// Setup Comapi request JSON
-var myRequest = {
-    body: 'Your SMS message',
-    to: { phoneNumber: yourMobileNumber },
-    rules: ['sms']
-};
+// Setup Comapi batch request JSON, this is an array of messages to be sent, we are sending to the SMS channel but they could easily
+// be a mix of any messages targeting any channels.
+var myRequestBatch = [
+    {
+        body: 'This is message 1',
+        to: { phoneNumber: yourMobileNumber },
+        rules: ['sms']
+    },
+    {
+        body: 'This is message 2',
+        to: { phoneNumber: yourMobileNumber },
+        channelOptions: {
+            sms: {
+                from: 'Comapi',
+                allowUnicode: true
+            }
+        },
+        rules: ['sms']
+    }
+];
 
 // Call Comapi "One" API
 var options = {
@@ -37,7 +51,7 @@ var options = {
         'accept': 'application/json',
         authorization: 'Bearer ' + yourComapiAccessToken
     },
-    body: myRequest,
+    body: myRequestBatch,
     json: true
 };
 
@@ -49,18 +63,16 @@ request(options, function (error, response, body) {
     if (error) throw new Error(error);
 
     console.log("HTTP status code returned: " + response.statusCode);
+    console.log(body);
 
-    // Check status
-    if (response.statusCode == 201)
-    {
+    // Check status of Accepted
+    if (response.statusCode == 202) {
         // All ok
-        console.log('SMS message successfully sent via Comapi "One" API');
+        console.log('Message batch successfully sent via Comapi "One" API');
+        console.log('An array of message ids has been returned mapping to your request array');
     }
-    else
-    {
+    else {
         // Something went wrong
         console.log('Something went wrong!');
     }
-
-    console.log(body);
 });
