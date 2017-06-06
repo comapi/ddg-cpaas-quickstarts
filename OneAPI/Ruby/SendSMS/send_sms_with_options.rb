@@ -22,6 +22,7 @@ http.verify_mode = OpenSSL::SSL::VERIFY_NONE # This should be removed and SSL ce
 request = Net::HTTP::Post.new(url)
 request["authorization"] = 'Bearer ' + Token
 request["content-type"] = 'application/json'
+request["accept"] = 'application/json'
 request["cache-control"] = 'no-cache'
 
 # Create the Comapi request JSON
@@ -47,4 +48,4 @@ response = http.request(request)
 
 puts ""
 puts "Call returned status code: " + response.code
-puts response.read_body
+puts JSON.pretty_unparse(JSON.parse(response.read_body)) # Pretty print the JSON

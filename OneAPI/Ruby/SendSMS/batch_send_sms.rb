@@ -1,17 +1,18 @@
 require 'uri'
 require 'net/http'
 require 'openssl'
+require 'json'
 
 # Your Comapi settings
 ApiSpace = "***ADD YOUR API SPACE ID HERE***"
 Token = "***ADD YOUR SECURITY TOKEN HERE***"
 
 puts ""
-puts "Sending SMS using Comapi and Ruby"
-puts "---------------------------------"
+puts "Sending SMS batches using Comapi and Ruby"
+puts "-----------------------------------------"
 
 # Create the RESTful URL
-url = URI("https://api.comapi.com/apispaces/" + ApiSpace + "/messages")
+url = URI("https://api.comapi.com/apispaces/" + ApiSpace + "/messages/batch")
 
 # Setup the conneciton object
 http = Net::HTTP.new(url.host, url.port)
@@ -25,15 +26,24 @@ request["content-type"] = 'application/json'
 request["accept"] = 'application/json'
 request["cache-control"] = 'no-cache'
 
-# Create the Comapi request JSON
+# Create the Comapi request JSON for a batch of messages, this is simply an array of message requests.
 request.body = 
-    "{
-      \"body\": \"Your SMS message\",
-      \"to\": {
-          \"phoneNumber\": \"447123123123\"
-        },
-     \"rules\": [ \"sms\" ]
-     }"
+    "[
+      {
+        \"body\": \"This is message 1\",
+        \"to\": {
+            \"phoneNumber\": \"447123123123\"
+          },
+      \"rules\": [ \"sms\" ]
+      },
+      {
+        \"body\": \"This is message 2\",
+        \"to\": {
+            \"phoneNumber\": \"447234234234\"
+          },
+      \"rules\": [ \"sms\" ]
+      }
+    ]"
 
 # Call the web service
 puts ""
