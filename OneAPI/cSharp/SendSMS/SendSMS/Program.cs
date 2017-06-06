@@ -114,7 +114,7 @@ namespace SendSMS
         private static void SendSMS(SMSSendRequest smsRequest)
         {
             // Setup a REST client object using the message send URL with our API Space incorporated
-            var client = new RestClient(string.Format("https://stage-api.comapi.com/apispaces/{0}/messages", APISPACE));
+            var client = new RestClient(string.Format("https://api.comapi.com/apispaces/{0}/messages", APISPACE));
             var request = new RestRequest(Method.POST);
             request.AddHeader("cache-control", "no-cache");
             request.AddHeader("content-type", "application/json");
@@ -145,7 +145,7 @@ namespace SendSMS
         private static void SendSMSBatch(SMSSendRequest[] smsRequests)
         {
             // Setup a REST client object using the message send URL with our API Space incorporated
-            var client = new RestClient(string.Format("https://stage-api.comapi.com/apispaces/{0}/messages/batch", APISPACE));
+            var client = new RestClient(string.Format("https://api.comapi.com/apispaces/{0}/messages/batch", APISPACE));
             var request = new RestRequest(Method.POST);
             request.AddHeader("cache-control", "no-cache");
             request.AddHeader("content-type", "application/json");

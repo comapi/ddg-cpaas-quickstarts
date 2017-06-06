@@ -2,8 +2,8 @@ import http.client
 import json
 
 print("")
-print("Sending SMS using Comapi and Python")
-print("-----------------------------------")
+print("Sending SMS batches using Comapi and Python")
+print("-------------------------------------------")
 
 # Your Comapi settings
 APISPACE = "***ADD YOUR API SPACE ID HERE***"
@@ -13,20 +13,22 @@ TOKEN = "***ADD YOUR SECURITY TOKEN HERE***"
 conn = http.client.HTTPSConnection("api.comapi.com")
 
 # Construct the Comapi API request
-myRequest = {
-    "to": {
-        "phoneNumber": "447123123123"
-    },
-    "body": "This is an SMS via Comapi \"One\" API",
-    "channelOptions":
+myRequest = [
     {
-        "sms": {
-            "from": "Comapi",
-            "allowUnicode": False
-        }
+        "to": {
+            "phoneNumber": "447123123123"
+        },
+        "body": "This is message 1",
+        "rules": ["sms"]
     },
-    "rules": ["sms"]
-}
+    {
+        "to": {
+            "phoneNumber": "447123123123"
+        },
+        "body": "This is message 2",
+        "rules": ["sms"]
+    }
+]
 
 print("")
 print("Request JSON: ")
@@ -34,15 +36,16 @@ print(json.dumps(myRequest, indent=2))
 
 # Setup the http headers
 headers = {
-    'authorization': "Bearer " + TOKEN,
-    'content-type': "application/json",
-    'cache-control': "no-cache"
+    "authorization": "Bearer " + TOKEN,
+    "content-type": "application/json",
+    "accept": "application/json",
+    "cache-control": "no-cache"
 }
 
 # Make the webservice request
 print("")
 print("Calling Comapi...")
-conn.request("POST", "/apispaces/" + APISPACE + "/messages",
+conn.request("POST", "/apispaces/" + APISPACE + "/messages/batch",
              json.dumps(myRequest), headers)
 
 res = conn.getresponse()

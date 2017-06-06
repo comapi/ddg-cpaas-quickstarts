@@ -23,7 +23,7 @@ myRequest = {
 
 print("")
 print("Request JSON: ")
-print(json.dumps(myRequest))
+print(json.dumps(myRequest, indent=2))
 
 # Setup the http headers
 headers = {
@@ -43,5 +43,5 @@ data = res.read()
 
 print("")
 print("Call returned status code: " + str(res.status))
-print(data.decode("utf-8"))
+print(json.dumps(json.loads(data.decode("utf-8")), indent=2)) # Pretty print the JSON
 print("")

@@ -17,7 +17,7 @@ console.log('Sending a batch of SMS using Comapi and NodeJS');
 console.log('----------------------------------------------');
 
 // Create Comapi RESTful URL with API Space Id in it
-var comapiUrl = "https://stage-api.comapi.com/apispaces/" + yourComapiAPISpaceId + "/messages/batch";
+var comapiUrl = "https://api.comapi.com/apispaces/" + yourComapiAPISpaceId + "/messages/batch";
 
 // Setup Comapi batch request JSON, this is an array of messages to be sent, we are sending to the SMS channel but they could easily
 // be a mix of any messages targeting any channels.
