@@ -11,27 +11,88 @@ namespace SendSMS
 {
     class Program
     {
+        // **** Enter you API Space and security token details here ****
+        private const string APISPACE = "YOUR_API_SPACE_ID";
+        private const string TOKEN = "YOUR_ACCESS_TOKEN";
+
+        // **** Enter your mobile number here ****
+        private const string MOBILE_NUMBER = "447123123123";
+        private const int BATCH_SIZE = 3;
+
         static void Main(string[] args)
-        {
+        {            
             try
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine("Comapi \"One\" API SMS send example");
                 Console.ForegroundColor = ConsoleColor.White;
 
-                // Create an SMS request.
-                var myRequest = new SMSSendRequest();
-                myRequest.to = new SMSSendRequest.toStruct("ENTER A MOBILE NUMBER");
-                myRequest.body = "This is an SMS via Comapi \"One\" API";
+                string input, mode = null;
+                SMSSendRequest myRequest = null;
+
+                // Ask the user what demo mode they want
+                do
+                {                    
+                    Console.WriteLine("Send a `single` message or a `batch`, enter your choice now?");
+                    input = Console.ReadLine().ToLower();
+                    switch (input)
+                    {
+                        case "s":
+                        case "single":
+                            mode = "single";
+                            Console.WriteLine("Performing a single send");
+                            break;
+                        case "b":
+                        case "batch":
+                            mode = "batch";
+                            Console.WriteLine("Performing a batch send of {0} messages", BATCH_SIZE);
+                            break;
+                    }
+
+                    if (!string.IsNullOrEmpty(mode)) break;
+                 
+                } while (true);
 
                 // Set the channel options; optional step, comment out to use a local number to send from automatically
                 var myChannelOptions = new SMSSendRequest.channelOptionsStruct();
                 myChannelOptions.sms = new SMSSendRequest.smsChannelOptions() { from = "Comapi", allowUnicode = false };
-                myRequest.channelOptions = myChannelOptions;
 
-                // Send it.
-                SendSMS(myRequest);
+                // Send the messages
+                switch (mode)
+                {
+                    case "single":
+                        // Create an SMS request.
+                        myRequest = new SMSSendRequest();
+                        myRequest.to = new SMSSendRequest.toStruct(MOBILE_NUMBER);
+                        myRequest.body = "This is an SMS via Comapi \"One\" API";
+                        myRequest.channelOptions = myChannelOptions;
 
+                        // Send it.
+                        SendSMS(myRequest);
+
+                        break;
+                    case "batch":
+                        // Create a couple of requests in an array to create a batch of requests
+                        SMSSendRequest[] myBatch = new SMSSendRequest[BATCH_SIZE];
+
+                        for (int i = 0; i < BATCH_SIZE; i++)
+                        {
+                            // Create a message send request 
+                            myRequest = new SMSSendRequest();
+                            myRequest.to = new SMSSendRequest.toStruct(MOBILE_NUMBER);
+                            myRequest.body = "This is message " + i;
+                            myRequest.channelOptions = myChannelOptions;
+
+                            // Add to batch array
+                            myBatch[i] = myRequest;
+                        }
+
+                        // Send them
+                        SendSMSBatch(myBatch);
+
+                        break;
+                }
+                
                 // All good
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("SMS sent successfully");
@@ -52,15 +113,12 @@ namespace SendSMS
 
         private static void SendSMS(SMSSendRequest smsRequest)
         {
-            // **** Enter you API Space and security token details here ****
-            const string APISPACE = "YOUR API SPACE ID";
-            const string TOKEN = "YOUR SECURITY TOKEN";
-
             // Setup a REST client object using the message send URL with our API Space incorporated
-            var client = new RestClient(string.Format("https://api.comapi.com/apispaces/{0}/messages", APISPACE));
+            var client = new RestClient(string.Format("https://stage-api.comapi.com/apispaces/{0}/messages", APISPACE));
             var request = new RestRequest(Method.POST);
             request.AddHeader("cache-control", "no-cache");
             request.AddHeader("content-type", "application/json");
+            request.AddHeader("accept", "application/json");
             request.AddHeader("authorization", "Bearer " + TOKEN); // Add the security token
             
             // Serialise our SMS request object to JSON for submission
@@ -74,6 +132,44 @@ namespace SendSMS
             {
                 // Something went wrong.
                 throw new InvalidOperationException(string.Format("Call to Comapi failed with status code ({0}), and body: {1}", response.StatusCode, response.Content));
+            }
+            else
+            {
+                // Sucess output the response body
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(FormatJson(response.Content));
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+        }
+
+        private static void SendSMSBatch(SMSSendRequest[] smsRequests)
+        {
+            // Setup a REST client object using the message send URL with our API Space incorporated
+            var client = new RestClient(string.Format("https://stage-api.comapi.com/apispaces/{0}/messages/batch", APISPACE));
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("cache-control", "no-cache");
+            request.AddHeader("content-type", "application/json");
+            request.AddHeader("accept", "application/json");
+            request.AddHeader("authorization", "Bearer " + TOKEN); // Add the security token
+
+            // Serialise our SMS request object to JSON for submission
+            string requestJson = JsonConvert.SerializeObject(smsRequests);
+            request.AddParameter("application/json", requestJson, ParameterType.RequestBody);
+
+            // Make the web service call
+            IRestResponse response = client.Execute(request);
+
+            if (response.StatusCode != System.Net.HttpStatusCode.Accepted)
+            {
+                // Something went wrong.
+                throw new InvalidOperationException(string.Format("Call to Comapi failed with status code ({0}), and body: {1}", response.StatusCode, response.Content));
+            }
+            else
+            {
+                // Sucess output the response body
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(FormatJson(response.Content));
+                Console.ForegroundColor = ConsoleColor.White;
             }
         }
 
@@ -143,6 +239,17 @@ namespace SendSMS
             /// The Comapi API channel rules
             /// </summary>
             public string[] rules { get; set; }
+        }
+
+        /// <summary>
+        /// Formats JSON to make it more readable.
+        /// </summary>
+        /// <param name="json"></param>
+        /// <returns>Formatted JSON string</returns>
+        private static string FormatJson(string json)
+        {
+            dynamic parsedJson = JsonConvert.DeserializeObject(json);
+            return JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
         }
     }
 }
