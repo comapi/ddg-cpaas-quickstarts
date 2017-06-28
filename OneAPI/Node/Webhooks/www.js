@@ -7,6 +7,7 @@
 var app = require('./app');
 var fs = require('fs');
 var debug = require('debug')('webhooks:server');
+var http = require('http');
 var https = require('https');
 
 /**
@@ -14,7 +15,7 @@ var https = require('https');
  */
 
 var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+var sslPort = normalizePort(process.env.SSL_PORT || port + 1);
 
 /**
  * Create HTTP server with SSL support.
@@ -25,16 +26,22 @@ var sslOptions = {
     passphrase: "password"
 };
 
-var server = https.createServer(sslOptions, app);
+// Listen for HTTP traffic
+var server = http.createServer(app).listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+// Listen for HTTPS traffic
+var sslServer = https.createServer(sslOptions, app).listen(port + 1);
+sslServer.on('error', onError);
+sslServer.on('listening', onListening);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-console.log('Express listening on port: ' + port);
-console.log('Browse to https://localhost:' + port + '/')
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+console.log('Express running...');
+console.log('Browse to http://localhost:' + port);
+console.log('SSL browse to https://localhost:' + sslPort);
 
 /**
  * Normalize a port into a number, string, or false.
