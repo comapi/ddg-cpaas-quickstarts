@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,12 @@ namespace Webhook.Utils
         readonly static string LOG_FILE = Path.GetTempPath() + "comapi_webhook.log";
         readonly static int MaxRolledLogCount = 3;
         readonly static int MaxLogSize = (1024 * 1024 * 5); // Log size in bytes (5MB)
+
+        static RollingLogger()
+        {
+            // Output log file path
+            Debug.WriteLine("Comapi webhook logging path: " + LOG_FILE);
+        }
 
         public static void LogMessage(string msg)
         {
