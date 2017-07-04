@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using Webhook.Utils;
 
 /// <summary>
 /// Comapi webhook controller
@@ -51,7 +52,7 @@ namespace Webhook.Controllers
                 if (String.IsNullOrEmpty(hmac))
                 {
                     // No HMAC, invalid request.
-                    Debug.WriteLine("Invalid request: No HMAC value found!");
+                    RollingLogger.LogMessage("Invalid request: No HMAC value found!");
                     return Unauthorized();
                 }
                 else
@@ -62,7 +63,7 @@ namespace Webhook.Controllers
                     if (hmac != hash)
                     {
                         // The request is not from Comapi or has been tampered with
-                        Debug.WriteLine("Invalid request: HMAC hash check failed!");
+                        RollingLogger.LogMessage("Invalid request: HMAC hash check failed!");
                         return Unauthorized();
                     }
                 }
@@ -71,9 +72,9 @@ namespace Webhook.Controllers
                 dynamic eventObj = JsonConvert.DeserializeObject(rawBody);
 
                 // Store the received event for later processing, remember you only have 10 secs to process, in this simple example we output to the console
-                Debug.WriteLine("");
-                Debug.WriteLine("Received a {0} event id: {1}", (string)eventObj.name, (string)eventObj.eventId);
-                Debug.WriteLine(FormatJson(rawBody));
+                RollingLogger.LogMessage("");
+                RollingLogger.LogMessage(String.Format("Received a {0} event id: {1}", (string)eventObj.name, (string)eventObj.eventId));
+                RollingLogger.LogMessage(FormatJson(rawBody));
 
                 // You could use queuing tech such as RabbitMQ, MSMQ or possibly a distributed cache such as Redis
 
@@ -84,7 +85,7 @@ namespace Webhook.Controllers
             {
                 // An error occurred
                 var msg = "An error occurred receiving data, the error was: " + err.ToString();
-                Debug.WriteLine(msg);
+                RollingLogger.LogMessage(msg);
                 throw;
             }
         }
