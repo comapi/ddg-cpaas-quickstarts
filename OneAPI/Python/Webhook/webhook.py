@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# A basic website to demonstrate Facebook opt-in using Comapi and Python.
+# A basic website to demonstrate receiving data from Comapi using Python and Flask.
 import hmac
 import hashlib
 import json
