@@ -77,5 +77,15 @@ def post_index():
         raise
 
 # Fire up the local server
+my_port = int(os.environ.get('PORT', 5000))
+
+if 'DYNO' in os.environ:
+    # Running in Heroku
+    debug = False
+    host_ip = "0.0.0.0"
+else:
+    debug = True
+    host_ip = "127.0.0.1"
+    
 if __name__ == "__main__":
-    app.run()
+    app.run(host=host_ip, port=my_port)
