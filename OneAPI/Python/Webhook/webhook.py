@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # A basic website to demonstrate receiving data from Comapi using Python and Flask.
+import os
 import hmac
 import hashlib
 import json
