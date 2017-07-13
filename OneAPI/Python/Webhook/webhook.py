@@ -33,7 +33,7 @@ def get_index():
 def post_index():
     # Process data sent from Comapi
     try:
-        # Grab the body and parse to a JSON object
+        # Grab the body data
         raw_body = request.get_data().decode("utf-8")
 
         if (raw_body is None):
