@@ -39,7 +39,7 @@ class ApplicationController < ActionController::Base
 
         if (request_hmac != hash)
             # The request is not from Comapi or has been tampered with
-            render :inline => "Invalid request: HMAC hash check failed!", :status => 400
+            render :inline => "Invalid request: HMAC hash check failed!", :status => 401
             return
         end
     end
