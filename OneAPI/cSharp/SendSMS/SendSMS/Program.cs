@@ -65,7 +65,7 @@ namespace SendSMS
                         myRequest = new SMSSendRequest();
                         myRequest.to = new SMSSendRequest.toStruct(MOBILE_NUMBER);
                         myRequest.body = "This is an SMS via Comapi \"One\" API";
-                        myRequest.channelOptions = myChannelOptions;
+                        myRequest.channelOptions = null;
 
                         // Send it.
                         SendSMS(myRequest);
@@ -122,7 +122,7 @@ namespace SendSMS
             request.AddHeader("authorization", "Bearer " + TOKEN); // Add the security token
             
             // Serialise our SMS request object to JSON for submission
-            string requestJson = JsonConvert.SerializeObject(smsRequest);
+            string requestJson = JsonConvert.SerializeObject(smsRequest, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             request.AddParameter("application/json", requestJson, ParameterType.RequestBody);
 
             // Make the web service call
@@ -153,7 +153,7 @@ namespace SendSMS
             request.AddHeader("authorization", "Bearer " + TOKEN); // Add the security token
 
             // Serialise our SMS request object to JSON for submission
-            string requestJson = JsonConvert.SerializeObject(smsRequests);
+            string requestJson = JsonConvert.SerializeObject(smsRequests, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             request.AddParameter("application/json", requestJson, ParameterType.RequestBody);
 
             // Make the web service call
@@ -208,7 +208,7 @@ namespace SendSMS
                 /// <summary>
                 /// Flag to indicate whether unicode messages are allowed to be sent
                 /// </summary>
-                public bool allowUnicode;
+                public bool? allowUnicode;
             }
 
             public struct channelOptionsStruct
@@ -233,7 +233,7 @@ namespace SendSMS
             /// <summary>
             /// The channel options for the request
             /// </summary>
-            public channelOptionsStruct channelOptions { get; set; }
+            public channelOptionsStruct? channelOptions { get; set; }
 
             /// <summary>
             /// The Comapi API channel rules
