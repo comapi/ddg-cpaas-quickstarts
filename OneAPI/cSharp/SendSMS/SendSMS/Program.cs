@@ -65,7 +65,7 @@ namespace SendSMS
                         myRequest = new SMSSendRequest();
                         myRequest.to = new SMSSendRequest.toStruct(MOBILE_NUMBER);
                         myRequest.body = "This is an SMS via Comapi \"One\" API";
-                        myRequest.channelOptions = null;
+                        myRequest.channelOptions = myChannelOptions;
 
                         // Send it.
                         SendSMS(myRequest);
