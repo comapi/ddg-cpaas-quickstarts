@@ -98,7 +98,7 @@ namespace Webhook.Controllers
         /// <returns>HMAC-SHA1 hash for the data</returns>
         private string CreateHMAC(string data, string key)
         {
-            System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
+            System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
             byte[] keyByte = encoding.GetBytes(key);
 
             HMACSHA1 hmacsha1 = new HMACSHA1(keyByte);
