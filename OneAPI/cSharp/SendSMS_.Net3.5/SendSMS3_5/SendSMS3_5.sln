@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SendSMS3_5", "SendSMS3_5.csproj", "{01573CAB-997E-44BC-A9AD-BB2FA0C3275B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{01573CAB-997E-44BC-A9AD-BB2FA0C3275B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01573CAB-997E-44BC-A9AD-BB2FA0C3275B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01573CAB-997E-44BC-A9AD-BB2FA0C3275B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01573CAB-997E-44BC-A9AD-BB2FA0C3275B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
