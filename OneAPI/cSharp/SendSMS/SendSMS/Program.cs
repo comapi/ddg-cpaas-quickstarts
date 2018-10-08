@@ -6,6 +6,7 @@
 using Newtonsoft.Json;
 using RestSharp;
 using System;
+using System.Net;
 
 namespace SendSMS
 {
@@ -23,6 +24,10 @@ namespace SendSMS
         {            
             try
             {
+                // Ensure we use later versions of TLS for security
+                ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072 | (SecurityProtocolType)768;
+
+                // Start the console
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine("Comapi \"One\" API SMS send example");
                 Console.ForegroundColor = ConsoleColor.White;
