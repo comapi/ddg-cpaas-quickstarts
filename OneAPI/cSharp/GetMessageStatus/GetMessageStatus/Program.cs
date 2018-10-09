@@ -8,6 +8,7 @@ namespace GetMessageStatus
     using Newtonsoft.Json;
     using RestSharp;
     using System;
+    using System.Net;
 
     /// <summary>
     /// Simple example console app to retrieve a messages status using the Comapi "One" API
@@ -26,6 +27,10 @@ namespace GetMessageStatus
         {
             try
             {
+                // Ensure we use later versions of TLS for security
+                ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072 | (SecurityProtocolType)768;
+
+                // Start
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine("Comapi \"One\" API Get message status example");
                 Console.ForegroundColor = ConsoleColor.White;
