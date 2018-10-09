@@ -3,6 +3,10 @@ var request = require('request-promise');
 var router = express.Router();
 global.verifyRequestId = null;
 
+router.get('/', function(req, res){
+    res.redirect('/register');
+  });
+
 router.get('/register', function(req, res, next) {
     res.render('register');
 });
