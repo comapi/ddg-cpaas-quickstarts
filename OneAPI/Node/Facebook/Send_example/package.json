@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/comapi/comapi-quickstarts#readme",
   "dependencies": {
-    "request": "^2.81.0"
+    "request": "^2.88.0"
   }
 }

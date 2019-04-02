@@ -7,13 +7,13 @@
     "start": "node ./www"
   },
   "dependencies": {
-    "body-parser": "~1.17.1",
-    "cookie-parser": "~1.4.3",
-    "debug": "~2.6.3",
-    "express": "~4.15.2",
-    "ejs": "~2.5.6",
-    "morgan": "~1.8.1",
-    "serve-favicon": "~2.4.2",
-    "request": "^2.81.0"
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.4",
+    "debug": "^2.6.9",
+    "ejs": "^2.5.9",
+    "express": "^4.16.4",
+    "morgan": "^1.9.1",
+    "request": "^2.88.0",
+    "serve-favicon": "^2.4.5"
   }
 }
