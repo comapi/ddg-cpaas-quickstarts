@@ -1,7 +1,11 @@
 var express = require('express');
 var request = require('request-promise');
 var router = express.Router();
+
 global.verifyRequestId = null;
+
+const _useranme = "**Your username**";
+const _password = "**Your password**";
 
 router.get('/', function(req, res){
     res.redirect('/register');
@@ -19,8 +23,8 @@ router.post('/register', function(req, res, next) {
             method: 'POST',
             url: 'https://services.dynmark.com/webapi/verify',
             auth: {
-                'user': '@Username@',
-                'pass': '@Password@'
+                'user': _useranme,
+                'pass': _password
             },
             timeout: 130000,
             json: true,
@@ -89,8 +93,8 @@ router.post('/verify', function(req, res, next) {
             method: 'PUT',
             url: 'https://services.dynmark.com/webapi/verify/' + global.verifyRequestId + "/validate",
             auth: {
-                'user': '@Username@',
-                'pass': '@Password@'
+                'user': _useranme,
+                'pass': _password
             },
             timeout: 130000,
             json: true,
