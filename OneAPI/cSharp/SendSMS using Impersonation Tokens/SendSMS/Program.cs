@@ -222,7 +222,7 @@ namespace SendSMS
                 { "resellerId", RESELLER_ACCOUNT_ID },
                 { "aud", "https://api.comapi.com" },
                 { "iss", issuer },
-                { "exp", (long)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds }
+                { "exp", (long)(DateTime.UtcNow.AddMinutes(115) - new DateTime(1970, 1, 1)).TotalSeconds } // Expires 115 minutes in the the future based on UTC
            };
 
             var secToken = new JwtSecurityToken(header, payload);
