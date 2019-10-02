@@ -210,7 +210,7 @@ namespace SendSMS
             // Create Security key using the secret
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
             var signingCredentials = new Microsoft.IdentityModel.Tokens.SigningCredentials
-                              (securityKey, SecurityAlgorithms.HmacSha256Signature);
+                              (securityKey, SecurityAlgorithms.HmacSha256);
 
             //  Create a token
             var header = new JwtHeader(signingCredentials);
@@ -218,7 +218,7 @@ namespace SendSMS
             // Create the JWT payload including the details on the customer to impersonate.
             var payload = new JwtPayload
            {
-                { "accountId ", impersonatedAccountId },
+                { "accountId", impersonatedAccountId },
                 { "resellerId", RESELLER_ACCOUNT_ID },
                 { "aud", "https://api.comapi.com" },
                 { "iss", issuer },
