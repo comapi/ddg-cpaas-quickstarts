@@ -21,7 +21,7 @@ router.post('/register', function(req, res, next) {
     {
         request({
             method: 'POST',
-            url: 'https://services.dynmark.com/webapi/verify',
+            url: 'https://services.comapi.com/webapi/verify',
             auth: {
                 'user': _useranme,
                 'pass': _password
@@ -91,7 +91,7 @@ router.post('/verify', function(req, res, next) {
     {
         request({
             method: 'PUT',
-            url: 'https://services.dynmark.com/webapi/verify/' + global.verifyRequestId + "/validate",
+            url: 'https://services.comapi.com/webapi/verify/' + global.verifyRequestId + "/validate",
             auth: {
                 'user': _useranme,
                 'pass': _password
