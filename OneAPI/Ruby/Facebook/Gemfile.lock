@@ -53,6 +53,7 @@ GEM
     crass (1.0.5)
     erubi (1.9.0)
     execjs (2.7.0)
+    ffi (1.11.3)
     ffi (1.11.3-x64-mingw32)
     ffi (1.11.3-x86-mingw32)
     globalid (0.4.2)
@@ -71,9 +72,11 @@ GEM
     mini_portile2 (2.4.0)
     minitest (5.13.0)
     nio4r (2.5.2)
-    nokogiri (1.10.7-x64-mingw32)
+    nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
-    nokogiri (1.10.7-x86-mingw32)
+    nokogiri (1.10.9-x64-mingw32)
+      mini_portile2 (~> 2.4.0)
+    nokogiri (1.10.9-x86-mingw32)
       mini_portile2 (~> 2.4.0)
     puma (3.12.2)
     rack (2.0.8)
@@ -147,6 +150,7 @@ GEM
     websocket-extensions (0.1.4)
 
 PLATFORMS
+  ruby
   x64-mingw32
   x86-mingw32
 
