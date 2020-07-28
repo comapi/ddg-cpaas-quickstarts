@@ -15,9 +15,9 @@ namespace GetMessageStatus
     /// </summary>
     public class Program
     {
-        // **** Enter you API Space and security token details here ****
-        private const string APISPACE = "YOUR_API_SPACE_ID";
-        private const string TOKEN = "YOUR_ACCESS_TOKEN";
+        // **** Enter you API username and password here ****
+        const string API_USERNAME = "apiuser-371ffb3ef98c@apiconnector.com";
+        const string API_PASSWORD = "MagentoPassw0rd!";
 
         /// <summary>
         /// Console app main entry point

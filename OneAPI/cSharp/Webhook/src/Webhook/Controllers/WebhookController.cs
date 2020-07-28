@@ -1,7 +1,7 @@
-﻿/******************************************************************************
- * Description: Simple webhook implementation for receiving events from Comapi
+﻿/*********************************************************************************************
+ * Description: Simple webhook implementation for receiving events from Engagement Cloud CPaaS
  * Author:      Dave Baddeley
- *****************************************************************************/
+ *********************************************************************************************/
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +14,7 @@ using System.Text;
 using Webhook.Utils;
 
 /// <summary>
-/// Comapi webhook controller
+/// Engagement Cloud CPaaS webhook controller
 /// </summary>
 namespace Webhook.Controllers
 {
@@ -25,14 +25,14 @@ namespace Webhook.Controllers
         [HttpGet, Produces("text/html")]
         public string Get()
         {
-            return "<!DOCTYPE html><html> <head> <title>Comapi webhook page</title> </head> <body> <h1>Comapi webhook page</h1> <p>Configure this page as your Comapi webhook location to start receiving data.</p> </body></html>";
+            return "<!DOCTYPE html><html> <head> <title>Engagement Cloud CPaaS webhook page</title> </head> <body> <h1>Engagement Cloud CPaaS webhook page</h1> <p>Configure this page as your Engagement Cloud CPaaS webhook location to start receiving data.</p> </body></html>";
         }
 
         // POST /webhook
         [HttpPost]
         public IActionResult Post()
         {
-            // Process data received from Comapi
+            // Process data received from Engagement Cloud CPaaS
             try
             {
                 // Grab the body and parse to a JSON object
@@ -45,7 +45,7 @@ namespace Webhook.Controllers
 
                 // We have a request body so lets look at what we have
 
-                // First lets ensure it hasn't been tampered with and it came from Comapi
+                // First lets ensure it hasn't been tampered with and it came from Engagement Cloud CPaaS
                 // We do this by checking the HMAC from the X-Comapi-Signature header
                 string hmac = Request.Headers["x-comapi-signature"];
 
@@ -62,7 +62,7 @@ namespace Webhook.Controllers
 
                     if (hmac != hash)
                     {
-                        // The request is not from Comapi or has been tampered with
+                        // The request is not from Engagement Cloud CPaaS or has been tampered with
                         RollingLogger.LogMessage("Invalid request: HMAC hash check failed!");
                         return Unauthorized();
                     }
