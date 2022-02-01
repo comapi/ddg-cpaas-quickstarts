@@ -1,12 +1,14 @@
 ﻿/******************************************************************************
- * Description: Simple SMS send example using the Comapi "One" API
+ * Description: Simple SMS send example using the Enterprise Communications API
  * Author:      Dave Baddeley
  *****************************************************************************/
  
 using Newtonsoft.Json;
 using RestSharp;
+using RestSharp.Serializers;
 using System;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace SendSMS
 {
@@ -20,7 +22,7 @@ namespace SendSMS
         private const string MOBILE_NUMBER = "447123123123";
         private const int BATCH_SIZE = 3;
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {            
             try
             {
@@ -29,7 +31,7 @@ namespace SendSMS
 
                 // Start the console
                 Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine("Comapi \"One\" API SMS send example");
+                Console.WriteLine("Dotdigital enterprise Communications API SMS send example");
                 Console.ForegroundColor = ConsoleColor.White;
 
                 string input, mode = null;
@@ -60,7 +62,7 @@ namespace SendSMS
 
                 // Set the channel options; optional step, comment out to use a local number to send from automatically
                 var myChannelOptions = new SMSSendRequest.channelOptionsStruct();
-                myChannelOptions.sms = new SMSSendRequest.smsChannelOptions() { from = "Comapi", allowUnicode = false };
+                myChannelOptions.sms = new SMSSendRequest.smsChannelOptions() { from = "Example", allowUnicode = false };
 
                 // Send the messages
                 switch (mode)
@@ -69,11 +71,11 @@ namespace SendSMS
                         // Create an SMS request.
                         myRequest = new SMSSendRequest();
                         myRequest.to = new SMSSendRequest.toStruct(MOBILE_NUMBER);
-                        myRequest.body = "This is an SMS via Comapi \"One\" API";
+                        myRequest.body = "This is an SMS via Dotdigital Enterprise Communications API";
                         myRequest.channelOptions = myChannelOptions;
 
                         // Send it.
-                        SendSMS(myRequest);
+                        await SendSMS(myRequest);
 
                         break;
                     case "batch":
@@ -93,7 +95,7 @@ namespace SendSMS
                         }
 
                         // Send them
-                        SendSMSBatch(myBatch);
+                        await SendSMSBatch(myBatch);
 
                         break;
                 }
@@ -116,27 +118,34 @@ namespace SendSMS
             Console.ReadLine();
         }
 
-        private static void SendSMS(SMSSendRequest smsRequest)
+        private async static Task SendSMS(SMSSendRequest smsRequest)
         {
             // Setup a REST client object using the message send URL with our API Space incorporated
-            var client = new RestClient(string.Format("https://api.comapi.com/apispaces/{0}/messages", APISPACE));
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("cache-control", "no-cache");
-            request.AddHeader("content-type", "application/json");
-            request.AddHeader("accept", "application/json");
-            request.AddHeader("authorization", "Bearer " + TOKEN); // Add the security token
+            var options = new RestClientOptions(string.Format("https://api.comapi.com/apispaces/{0}/messages", APISPACE))
+            {
+                ThrowOnAnyError = false,
+                Timeout = 30000
+            };
+
+            var client = new RestClient(options);
+            client.AddDefaultHeader("Content-Type", "application/json");
+            client.AddDefaultHeader("Accept", "application/json");
+
+            var request = new RestRequest();
+            request.AddHeader("Cache-Control", "no-cache");
+            request.AddHeader("Authorization", "Bearer " + TOKEN); // Add the security token
             
             // Serialise our SMS request object to JSON for submission
             string requestJson = JsonConvert.SerializeObject(smsRequest, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            request.AddParameter("application/json", requestJson, ParameterType.RequestBody);
+            request.AddStringBody(requestJson, ContentType.Json);
 
             // Make the web service call
-            IRestResponse response = client.Execute(request);
+            var response = await client.ExecutePostAsync(request);
 
             if (response.StatusCode != System.Net.HttpStatusCode.Created)
             {
                 // Something went wrong.
-                throw new InvalidOperationException(string.Format("Call to Comapi failed with status code ({0}), and body: {1}", response.StatusCode, response.Content));
+                throw new InvalidOperationException(string.Format("Call to Dotdigital Enterprise Communications API failed with status code ({0}), and body: {1}", response.StatusCode, response.Content));
             }
             else
             {
@@ -147,27 +156,34 @@ namespace SendSMS
             }
         }
 
-        private static void SendSMSBatch(SMSSendRequest[] smsRequests)
+        private async static Task SendSMSBatch(SMSSendRequest[] smsRequests)
         {
             // Setup a REST client object using the message send URL with our API Space incorporated
-            var client = new RestClient(string.Format("https://api.comapi.com/apispaces/{0}/messages/batch", APISPACE));
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("cache-control", "no-cache");
-            request.AddHeader("content-type", "application/json");
-            request.AddHeader("accept", "application/json");
-            request.AddHeader("authorization", "Bearer " + TOKEN); // Add the security token
+            var options = new RestClientOptions(string.Format("https://api.comapi.com/apispaces/{0}/messages/batch", APISPACE))
+            {
+                ThrowOnAnyError = false,
+                Timeout = 30000
+            };
+
+            var client = new RestClient(options);
+            client.AddDefaultHeader("Content-Type", "application/json");
+            client.AddDefaultHeader("Accept", "application/json");
+
+            var request = new RestRequest();
+            request.AddHeader("Cache-Control", "no-cache");
+            request.AddHeader("Authorization", "Bearer " + TOKEN); // Add the security token
 
             // Serialise our SMS request object to JSON for submission
             string requestJson = JsonConvert.SerializeObject(smsRequests, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            request.AddParameter("application/json", requestJson, ParameterType.RequestBody);
+            request.AddStringBody(requestJson, ContentType.Json);
 
             // Make the web service call
-            IRestResponse response = client.Execute(request);
+            var response = await client.ExecutePostAsync(request);
 
             if (response.StatusCode != System.Net.HttpStatusCode.Accepted)
             {
                 // Something went wrong.
-                throw new InvalidOperationException(string.Format("Call to Comapi failed with status code ({0}), and body: {1}", response.StatusCode, response.Content));
+                throw new InvalidOperationException(string.Format("Call to Dotdigital Enterprise Communications API failed with status code ({0}), and body: {1}", response.StatusCode, response.Content));
             }
             else
             {
