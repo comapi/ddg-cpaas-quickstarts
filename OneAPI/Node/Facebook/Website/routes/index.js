@@ -29,10 +29,10 @@ function generateFacebookMetaData(profileId) {
     // **** ENTER YOUR DETAILS HERE ****
 
     // Enter your Comapi API Space Id here e.g. 11164198-3f3f-4993-ab8f-70680c1113b1
-    var yourComapiAPISpaceId = 'YOUR_API_SPACE_ID';
+    var yourComapiAPISpaceId = '01722b21-6c71-4854-bd7e-cf565586c3c3';
 
     // Enter your Comapi access token here, it must include the Create State For Other Profile from the Facebook permissions category
-    var yourComapiAccessToken = 'YOUR_ACCESS_TOKEN';
+    var yourComapiAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3YzQ5NjYxYi0yNTJhLTQ3ZWItOTNiNi05ZmM3YzJkNjY0NmYiLCJpc3MiOiJodHRwczovL2FwaS5jb21hcGkuY29tL2FjY2Vzc3Rva2VucyIsImF1ZCI6Imh0dHBzOi8vYXBpLmNvbWFwaS5jb20iLCJhY2NvdW50SWQiOjM0NzI3LCJhcGlTcGFjZUlkIjoiMDE3MjJiMjEtNmM3MS00ODU0LWJkN2UtY2Y1NjU1ODZjM2MzIiwicGVybWlzc2lvbnMiOlsiY29udGVudDp3IiwiY2hhbjpyIiwiZmI6c3RhdGU6d2EiLCJtc2c6YW55OnMiLCJtc2c6ciIsIm1zZzpicmFuY2giLCJwcm9mOnJhIiwidG1wbDpyIiwiYXBpczpybyJdLCJzdWIiOiI3YzQ5NjYxYi0yNTJhLTQ3ZWItOTNiNi05ZmM3YzJkNjY0NmYiLCJuYW1lIjoiRmFjZWJvb2siLCJpYXQiOjE1OTk3NDI5OTR9.ANvZl0ZL2g9GbN03CFNNYTFU8BOvwIAMOgQXjpX6BkM';
 
     // Create Comapi RESTful URL with API Space Id in it
     var comapiUrl = "https://api.comapi.com/apispaces/" + yourComapiAPISpaceId + "/channels/facebook/state";

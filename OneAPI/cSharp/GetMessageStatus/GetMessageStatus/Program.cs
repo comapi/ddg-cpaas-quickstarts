@@ -1,5 +1,5 @@
 ﻿/// <summary>
-/// Description: Simple example to retrieve a messages status using the Comapi "One" API
+/// Description: Simple example to retrieve a messages status using the Dotdigital Enterprise Communications API
 /// Note:        We strongly recommend using webhooks instead of polling for efficency
 /// Author:      Dave Baddeley
 /// </summary>
@@ -9,21 +9,22 @@ namespace GetMessageStatus
     using RestSharp;
     using System;
     using System.Net;
+    using System.Threading.Tasks;
 
     /// <summary>
-    /// Simple example console app to retrieve a messages status using the Comapi "One" API
+    /// Simple example console app to retrieve a messages status using the Dotdigital  "One" API
     /// </summary>
     public class Program
     {
-        // **** Enter you API username and password here ****
-        const string API_USERNAME = "apiuser-371ffb3ef98c@apiconnector.com";
-        const string API_PASSWORD = "MagentoPassw0rd!";
+        // **** Enter you API Space and security token details here ****
+        private const string APISPACE = "YOUR_API_SPACE_ID";
+        private const string TOKEN = "YOUR_ACCESS_TOKEN";
 
         /// <summary>
         /// Console app main entry point
         /// </summary>
         /// <param name="args">command line args</param>
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             try
             {
@@ -32,7 +33,7 @@ namespace GetMessageStatus
 
                 // Start
                 Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine("Comapi \"One\" API Get message status example");
+                Console.WriteLine("Dotdigital Enterprise Communications API Get message status example");
                 Console.ForegroundColor = ConsoleColor.White;
 
                 string input = null;
@@ -78,18 +79,25 @@ namespace GetMessageStatus
             }
         }
 
-        private static void GetMessageStatusCall(Guid messageId)
+        private async static void GetMessageStatusCall(Guid messageId)
         {
             // Setup a RESTful client object using the message status URL with our API Space and message id incorporated
-            var client = new RestClient(string.Format("https://api.comapi.com/apispaces/{0}/messages/{1}", APISPACE, messageId.ToString("D")));
-            var request = new RestRequest(Method.GET);
-            request.AddHeader("cache-control", "no-cache");
-            request.AddHeader("content-type", "application/json");
-            request.AddHeader("accept", "application/json");
+            var options = new RestClientOptions(string.Format("https://api.comapi.com/apispaces/{0}/messages/{1}", APISPACE, messageId.ToString("D")))
+            {
+                ThrowOnAnyError = false,
+                Timeout = 30000
+            };
+
+            var client = new RestClient(options);
+            client.AddDefaultHeader("Content-Type", "application/json");
+            client.AddDefaultHeader("Accept", "application/json");
+
+            var request = new RestRequest();
+            request.AddHeader("Cache-Control", "no-cache");
             request.AddHeader("authorization", "Bearer " + TOKEN); // Add the security token
 
             // Make the web service call
-            IRestResponse response = client.Execute(request);
+            var response = await client.ExecuteGetAsync(request);
 
             switch (response.StatusCode)
             {
@@ -116,7 +124,7 @@ namespace GetMessageStatus
                     break;
                 default:
                     // Something went wrong.
-                    throw new InvalidOperationException(string.Format("Call to Comapi failed with status code ({0}), and body: {1}", response.StatusCode, response.Content));
+                    throw new InvalidOperationException(string.Format("Call to Dotdigital Enterprise Communications API failed with status code ({0}), and body: {1}", response.StatusCode, response.Content));
             }
         }
 

@@ -5,10 +5,10 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SendSMS")]
-[assembly: AssemblyDescription("An example of how to send an SMS using Comapi")]
+[assembly: AssemblyTitle("GetMessageStatus")]
+[assembly: AssemblyDescription("An example of how to get a messages status using Dotdigital Enterprise Communications API")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Comapi")]
+[assembly: AssemblyCompany("Dotdigital")]
 [assembly: AssemblyProduct("SendSMS")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
