@@ -1,5 +1,5 @@
-# dotdigital CPaaS Quickstarts
-You can find code examples and quick starts for [dotdigtal's CPaaS APIs](https://dotdigital.com/engagement-cloud/real-time-apis/) and SDKs here. 
+# Dotdigital Enterprise Communications API Quickstarts
+You can find code examples and quick starts for [Dotdigtal's Enterprise Communications API](https://docs.cpaas.dotdigital.com/) and SDKs here. 
 
 *Note:* These examples are designed to simply illustrate how our APIs and SDKs work and should not be considered production ready.
 
